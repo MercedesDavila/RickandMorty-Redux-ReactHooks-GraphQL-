@@ -11,9 +11,9 @@ import generateStore from './redux/store'
 let store = generateStore()
 
 let WithRouter = () => <BrowserRouter><App /></BrowserRouter>
-let WithStore = () => <Provider store={store}><WithRouter /></Provider>
+let WithStore = () => <Provider store={store} ><WithRouter /></Provider>
 
-ReactDOM.render(<WithRouter />, document.getElementById('root'));
+ReactDOM.render(<WithStore />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

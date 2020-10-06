@@ -1,54 +1,65 @@
-import axios from 'axios';
+import axios from 'axios'
 
-
-// constants
+// constantes
 let initialData = {
-     fetching:false,
-     array:[],
-     current:{}
-};
-
+    fetching: false,
+    array: [],
+    current: {},
+    favorites: []
+}
 let URL = "https://rickandmortyapi.com/api/character"
 
-let GET_CHARACTERS ='GET_CHARACTERS'
-let GET_CHARACTERS_SUCCESS= 'GET_CHARACTERS_SUCCESS'
-let GET_CHARACTERS_ERROR = 'GET_CHARACTERS_ERROR'
+let GET_CHARACTERS = "GET_CHARACTERS"
+let GET_CHARACTERS_SUCCESS = "GET_CHARACTERS_SUCCESS"
+let GET_CHARACTERS_ERROR = "GET_CHARACTERS_ERROR"
 
-//reducer
+let REMOVE_CHARACTER = "REMOVE_CHARACTER"
 
-export default function reducer(state = initialData, action){
-    switch(action.type){
+
+// reducer
+export default function reducer(state = initialData, action) {
+    switch (action.type) {
+
         case GET_CHARACTERS:
-            return { ...state, fetching:true}
+            return { ...state, fetching: true }
         case GET_CHARACTERS_ERROR:
-            return { ...state, fetching:false, error:action.payload}
+            return { ...state, fetching: false, error: action.payload }
         case GET_CHARACTERS_SUCCESS:
-            return{ ...state, array: action.payload, fetching: false}
+            return { ...state, array: action.payload, fetching: false }
         default:
-            return state;
+            return state
     }
 }
 
-//actions
+// actions (thunks)
 
-export let getCharactersAction = () =>  (dispatch, getState) => {
-    dispatch({ 
-        type:GET_CHARACTERS
+
+export let removeCharacterAction = () => (dispatch, getState) => {
+    // ?? donde estan lo ch
+    let { array } = getState().characters
+    array.shift()
+    dispatch({
+        type: REMOVE_CHARACTER,
+        payload: [...array]
+    })
+}
+
+export let getCharactersAction = () => (dispatch, getState) => {
+    dispatch({
+        type: GET_CHARACTERS
     })
     return axios.get(URL)
-    .then(res => {
-        dispatch({
-            type: GET_CHARACTERS_SUCCESS,
-            payload: res.data.results
+        .then(res => {
+            dispatch({
+                type: GET_CHARACTERS_SUCCESS,
+                payload: res.data.results
+            })
         })
-    })
-
-    .catch(err => {
-        
-        dispatch({
-            type:GET_CHARACTERS_ERROR,
-            payload: err.response.message
+        .catch(err => {
+            console.log(err)
+            dispatch({
+                type: GET_CHARACTERS_ERROR,
+                payload: err.response.message
+            })
         })
-    })
-
-    }
+}
