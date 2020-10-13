@@ -4,6 +4,7 @@ import Home from './components/home/HomePage'
 import FavPage from './components/favs/FavPage'
 import LoginPage from './components/login/LoginPage'
 
+
 function PrivateRoute({path, component, ...rest}){
     let storage = localStorage.getItem('storage')
     storage = JSON.parse(storage)
